@@ -3,5 +3,5 @@ project(TP_Image_Compression)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp quadtree.h)
 add_executable(TP_Image_Compression ${SOURCE_FILES})
