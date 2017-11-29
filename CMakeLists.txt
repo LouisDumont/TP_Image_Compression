@@ -6,3 +6,4 @@ find_package(Imagine REQUIRED)
 
 set(SOURCE_FILES main.cpp quadtree.h)
 add_executable(TP_Image_Compression ${SOURCE_FILES})
+ImagineUseModules(TP_Image_Compression Images)

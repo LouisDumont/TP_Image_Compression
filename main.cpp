@@ -4,6 +4,9 @@
 
 #include <iostream>
 #include "quadtree.h"
+#include <Imagine/Graphics.h>
+
+using namespace Imagine;
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
