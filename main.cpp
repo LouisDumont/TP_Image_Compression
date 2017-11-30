@@ -5,10 +5,24 @@
 #include <iostream>
 #include "quadtree.h"
 #include <Imagine/Graphics.h>
+#include <Imagine/Images.h>
 
 using namespace Imagine;
+using namespace std;
 
 int main() {
+    //Loading the image
+    Image<byte> I1;
+    const char* fic1 = srcPath("running-horse-square.png");
+    if(! load(I1, fic1)) {
+        cout << "Probleme dans le chargement d'images" << endl;
+        return 1;
+    }
+    Window W1 = openWindow(I1.width(), I1.height());
+    display(I1);
+    endGraphics();
+
+    //Tests on the quadtree structure
     std::cout << "Hello, World!" << std::endl;
     // Leaf and node creation
     QuadTree<int> *ql, *qn;
