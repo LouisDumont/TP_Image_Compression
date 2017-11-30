@@ -10,14 +10,72 @@
 using namespace Imagine;
 using namespace std;
 
+
+
+
+/*---------------------------------------------------------*
+ * Creating a quadtree representing the Image Img
+ *---------------------------------------------------------*/
+
+// Recursive function creating the QuadTree of a part of the
+// Image Img delimited by xMin, xMax, yMin, yMax
+template<typename T> QuadTree<T>* buildQuadTree
+        (Image<T> Img, int xMin, int xMax, int yMin, int yMax){
+
+    //Case of a pixel
+    if (xMin==xMax && yMin==yMax){
+        //Stocking the data from the pixel into the leaf
+        QuadTree<T>* res = new QuadLeaf<T>(Img[xMax,yMax]);
+    }
+
+    //Case of a bigger space
+    else {
+        int xMid = (xMin + xMax) / 2;
+        int yMid = (yMin + yMax) / 2;
+        //Construction of Sons
+        QuadTree<T>* fNW = buildQuadTree(Img, xMin, xMid, yMin, yMid);
+        QuadTree<T>* fNE = buildQuadTree(Img, xMin, xMid, yMid, yMax);
+        QuadTree<T>* fSW = buildQuadTree(Img, xMid, xMax, yMin, yMid);
+        QuadTree<T>* fSE = buildQuadTree(Img, xMid, xMax, yMid, yMax);
+        //A leaf is constructed if all the sons are leafs with the same value
+        bool condNorth = ((fNW->isLeaf() && fNE->isLeaf()) && (fNW->value() == fNE->value()));
+        bool condSouth = ((fSW->isLeaf() && fSE->isLeaf()) && (fSW->value() == fSE->value()));
+        if ((condNorth && condSouth) && (fNE->value() == fSE->value())) {
+            QuadLeaf<T> res = QuadLeaf<T>(fNW->value());
+        }
+            //Otherwise it's a node
+        else {
+            QuadTree<T>* res = new QuadNode<T>(fNW, fNE, fSE, fSW);
+        }
+    }
+
+    return res;
+}
+
+template <typename T> QuadTree<T>* imgToQuadTree(Image<T> Img){
+    //Calling the recursive function on the whole Image
+    int Iwidth  = Img.width();
+    int Iheight = Img.height();
+    return buildQuadTree(Img, 0, Iwidth, 0, Iheight);
+}
+
+
+
+
+
+
 int main() {
-    //Loading the image
+    //Loading and displaying the image
     Image<byte> I1;
     const char* fic1 = srcPath("running-horse-square.png");
     if(! load(I1, fic1)) {
         cout << "Probleme dans le chargement d'images" << endl;
         return 1;
     }
+    for (int i=1; i<I1.width()-10;i++){
+        I1[0,i]=1;
+    }
+    I1[I1.width()/2,I1.height()-2]=0;
     Window W1 = openWindow(I1.width(), I1.height());
     display(I1);
     endGraphics();
