@@ -22,10 +22,11 @@ using namespace std;
 template<typename T> QuadTree<T>* buildQuadTree
         (Image<T> Img, int xMin, int xMax, int yMin, int yMax){
 
+    QuadTree<T>* res;
     //Case of a pixel
     if (xMin==xMax && yMin==yMax){
         //Stocking the data from the pixel into the leaf
-        QuadTree<T>* res = new QuadLeaf<T>(Img[xMax,yMax]);
+        res = new QuadLeaf<T>(Img[xMax,yMax]);
     }
 
     //Case of a bigger space
@@ -41,17 +42,22 @@ template<typename T> QuadTree<T>* buildQuadTree
         bool condNorth = ((fNW->isLeaf() && fNE->isLeaf()) && (fNW->value() == fNE->value()));
         bool condSouth = ((fSW->isLeaf() && fSE->isLeaf()) && (fSW->value() == fSE->value()));
         if ((condNorth && condSouth) && (fNE->value() == fSE->value())) {
-            QuadLeaf<T> res = QuadLeaf<T>(fNW->value());
+            res = new QuadLeaf<T>(fNW->value());
+            delete [] fNW;
+            delete [] fNE;
+            delete [] fSE;
+            delete [] fSW;
         }
             //Otherwise it's a node
         else {
-            QuadTree<T>* res = new QuadNode<T>(fNW, fNE, fSE, fSW);
+            res = new QuadNode<T>(fNW, fNE, fSE, fSW);
         }
     }
 
     return res;
 }
 
+//Fancy function to be called by the user
 template <typename T> QuadTree<T>* imgToQuadTree(Image<T> Img){
     //Calling the recursive function on the whole Image
     int Iwidth  = Img.width();
@@ -79,6 +85,12 @@ int main() {
     Window W1 = openWindow(I1.width(), I1.height());
     display(I1);
     endGraphics();
+
+    //Tests on the new functions
+    for (int i=1; i<100; i++) {
+        QuadTree<byte> *Compr1 = imgToQuadTree(I1);
+        delete[] Compr1;
+    }
 
     //Tests on the quadtree structure
     std::cout << "Hello, World!" << std::endl;
