@@ -17,6 +17,8 @@ using namespace std;
 
 
 int main() {
+    QuadTree<byte>::protect_leaves_from_destruction = true;
+
     cout<<test<<endl;
     //Loading and displaying the image
     Image<byte> I1;
