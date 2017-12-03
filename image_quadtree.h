@@ -119,11 +119,6 @@ template<typename T> QuadTree<T>* buildQuadTree2
  * Getting back the image from the QuadTree representing it
  *-----------------------------------------------------------*/
 
-// Unfinished fancy function for the user
-template <typename T> Image<T> imgFromQuadTree(QuadTree<T> tree){
-    Image<T> ImRes;
-    return ImRes;
-}
 
 // Recursive function calculating the size of the image contained in the tree
 template <typename T> int getSize(QuadTree<T> tree){
@@ -135,4 +130,11 @@ template <typename T> int getSize(QuadTree<T> tree){
         int s3 = getSize(tree.son(3));
         return max(max(s0,s1),max(s2,s3));
     }
+}
+
+// Unfinished fancy function for the user
+template <typename T> Image<T> imgFromQuadTree(QuadTree<T> tree){
+    int size = getSize(tree);
+    Image<T> ImRes(size);
+    return ImRes;
 }
