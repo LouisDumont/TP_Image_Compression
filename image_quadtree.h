@@ -71,7 +71,7 @@ template <typename T> QuadTree<T>* imgToQuadTree(Image<T> Img){
     return buildQuadTree(Img, 0, Iwidth, 0, Iheight);
 }
 
-//Second and better less memory-consuming recursive function
+//Second and less memory-consuming recursive function
 //for black and white Images
 template<typename T> QuadTree<T>* buildQuadTree2
         (Image<T> img, int xMin, int xMax, int yMin, int yMax){
@@ -119,9 +119,20 @@ template<typename T> QuadTree<T>* buildQuadTree2
  * Getting back the image from the QuadTree representing it
  *-----------------------------------------------------------*/
 
-// Unfinished
+// Unfinished fancy function for the user
 template <typename T> Image<T> imgFromQuadTree(QuadTree<T> tree){
     Image<T> ImRes;
     return ImRes;
 }
 
+// Recursive function calculating the size of the image contained in the tree
+template <typename T> int getSize(QuadTree<T> tree){
+    if (tree.isLeaf()) {return 1;}
+    else{
+        int s0 = getSize(tree.son(0));
+        int s1 = getSize(tree.son(1));
+        int s2 = getSize(tree.son(2));
+        int s3 = getSize(tree.son(3));
+        return max(max(s0,s1),max(s2,s3));
+    }
+}
